@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lab Portal — Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="course-page">
+
+<header class="site-header">
+  <div class="header-inner">
+    <img src="assets/giki-logo.png" alt="GIKI crest" class="logo" onerror="this.style.display='none'">
+    <div>
+      <div class="institution">Ghulam Ishaq Khan Institute of Engineering Sciences and Technology</div>
+      <div class="faculty">Faculty of Basic Sciences — Fall 2026</div>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <a href="index.html" class="back-link">&larr; All courses</a>
+  <section class="lab-heading">
+    <span class="eyebrow" id="course-code"></span>
+    <h1 id="course-title">Course</h1>
+  </section>
+
+  <div class="course-layout">
+    <aside class="lab-sidebar" aria-label="Lab navigation">
+      <div class="sidebar-heading">
+        <span class="eyebrow">Course labs</span>
+        <h2>Experiments</h2>
+      </div>
+      <nav id="lab-nav" class="lab-nav"></nav>
+    </aside>
+    <div id="lab-container" class="experiment-list"><!-- filled by course.js --></div>
+  </div>
+</main>
+
+<footer>
+  <p>Ghulam Ishaq Khan Institute of Engineering Sciences and Technology · Faculty of Basic Sciences</p>
+  <p class="small">Built by Claude (Anthropic)</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/course.js" defer></script>
+</body>
+</html>
