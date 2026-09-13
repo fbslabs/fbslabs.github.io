@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FBS Lab Portal — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="admin-page">
+<header class="site-header">
+  <div class="header-inner">
+    <img src="assets/giki-logo.png" alt="GIKI crest" class="logo" onerror="this.style.display='none'">
+    <div>
+      <div class="institution">Ghulam Ishaq Khan Institute of Engineering Sciences and Technology</div>
+      <div class="faculty">Faculty of Basic Sciences — Admin</div>
+    </div>
+  </div>
+</header>
+
+<main class="container admin-container">
+  <div class="admin-topbar">
+    <div>
+      <span class="eyebrow">Restricted area</span>
+      <h1>Lab administration</h1>
+    </div>
+    <div class="admin-topbar-actions">
+      <a class="btn btn-secondary" href="index.html">Home</a>
+      <button id="sign-out" class="btn btn-secondary" type="button" hidden>Sign out</button>
+    </div>
+  </div>
+
+  <section id="login-panel" class="admin-panel admin-login-panel">
+    <span class="eyebrow">Secure access</span>
+    <h2>Admin sign in</h2>
+    <p class="admin-login-intro">Sign in to manage course files, submissions, and lab availability.</p>
+    <form id="login-form" class="admin-login-form">
+      <label>Email<input id="admin-email" type="email" autocomplete="username" placeholder="admin@example.com" required></label>
+      <label>Password<input id="admin-password" type="password" autocomplete="current-password" placeholder="Enter your password" required></label>
+      <button class="btn btn-primary" type="submit">Sign in</button>
+    </form>
+    <p id="login-message" class="message" role="status"></p>
+  </section>
+
+  <section id="admin-panel" hidden>
+    <div class="admin-controls">
+      <label>Course<select id="course-select"></select></label>
+      <p id="admin-message" class="message" role="status"></p>
+    </div>
+    <div id="admin-labs" class="admin-labs"></div>
+  </section>
+</main>
+
+<footer>
+  <p>Ghulam Ishaq Khan Institute of Engineering Sciences and Technology · Faculty of Basic Sciences</p>
+  <p class="small">Admin portal</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/admin.js" defer></script>
+</body>
+</html>

@@ -11,69 +11,24 @@ const COURSES = [
   {
     code: "ES441L",
     title: "Engineering Optimization Lab",
-    image: "assets/ES441L.png",
-    labTitles: [
-      "Linear Programming Fundamentals",
-      "Graphical Optimization Methods",
-      "Simplex Method Applications",
-      "Transportation and Assignment Problems",
-      "Integer Programming Models",
-      "Network Optimization Techniques",
-      "Nonlinear Optimization",
-      "Dynamic Programming Models",
-      "Multi-Objective Optimization",
-      "Sensitivity and Parametric Analysis",
-      "Optimization Case Study",
-      "Design an Optimization Model"
-    ]
+    image: "assets/ES441L.png"
   },
   {
     code: "ES442L",
     title: "Machine Learning Lab",
-    image: "assets/ES442L.png",
-    labTitles: [
-      "Data Preparation and Exploration",
-      "Linear and Polynomial Regression",
-      "Classification with Decision Trees",
-      "Nearest Neighbors and Model Evaluation",
-      "Support Vector Machines",
-      "Ensemble Learning Methods",
-      "Clustering and Unsupervised Learning",
-      "Dimensionality Reduction",
-      "Neural Network Fundamentals",
-      "Convolutional Neural Networks",
-      "End-to-End ML Pipeline",
-      "Build a Machine Learning Solution"
-    ]
+    image: "assets/ES442L.png"
   },
   {
     code: "ES471L",
     title: "Model Engineering Lab",
-    image: "assets/ES471L.png",
-    labTitles: [
-      "Engineering Model Foundations",
-      "Geometric Modeling Techniques",
-      "Parametric Design Workflows",
-      "Assembly and Constraint Modeling",
-      "Surface Modeling Methods",
-      "Finite Element Model Preparation",
-      "Mesh Generation and Quality",
-      "Model Validation and Testing",
-      "Design for Manufacturing",
-      "Model Automation and Scripting",
-      "Integrated Design Project",
-      "Develop a Complete Engineering Model"
-    ]
+    image: "assets/ES471L.png"
   }
 ];
 
 // ---- Shared lab metadata --------------------------------------------------
 // IDs, display names, and open-ended status are shared by every course.
-// Course-specific titles are defined in each course's `labTitles` array.
 // `id` MUST match the sub-folder name inside each course's Storage folder.
-// `title` is shown to students under the lab number — placeholder titles
-// below are random, just replace them with your real titles whenever
-// you're ready.
+// Titles are stored in the Supabase `lab_settings` table.
 const LABS = [
   { id: "lab-01", name: "Lab 1" },
   { id: "lab-02", name: "Lab 2" },

@@ -14,10 +14,29 @@ if (!course) {
 } else {
   document.getElementById("course-title").textContent = course.title;
   document.getElementById("course-code").textContent = course.code;
-  courseLabs = LABS.map((lab, i) => ({ ...lab, title: course.labTitles[i] || "" }));
+  courseLabs = LABS.map(lab => ({ ...lab, title: "" }));
   selectedLabIndex = Math.max(activeLabIndex(), 0);
   renderNav();
   render();
+  loadCourseSettings();
+}
+
+async function loadCourseSettings() {
+  try {
+    const { data, error } = await supabaseClient
+      .from("lab_settings")
+      .select("lab_id, title")
+      .eq("course_code", courseCode);
+    if (error) throw error;
+    (data || []).forEach(setting => {
+      const lab = courseLabs.find(item => item.id === setting.lab_id);
+      if (lab && setting.title) lab.title = setting.title;
+    });
+    renderNav();
+    render();
+  } catch (err) {
+    console.warn("Could not load course settings", err);
+  }
 }
 
 // Returns the index (into LABS / LAB_SCHEDULE) of the currently active
@@ -75,10 +94,11 @@ function buildLabPanel(lab) {
       </label>
       <label>
         File
-        <input type="file" class="file-input">
+        <input type="file" class="file-input" multiple>
       </label>
       <button type="submit" class="btn btn-primary">Submit</button>
       <p class="message" role="status"></p>
+      <p class="message upload-state" role="status"></p>
     </form>
   `;
 
@@ -132,11 +152,11 @@ async function downloadLabZip(path, files, lab, btn) {
   try {
     const zip = new JSZip();
     for (const file of files) {
-      const { data } = supabaseClient.storage.from(STORAGE_BUCKET).getPublicUrl(`${path}/${file.name}`);
-      const res = await fetch(data.publicUrl);
-      if (!res.ok) throw new Error(`Failed to fetch ${file.name}`);
-      const blob = await res.blob();
-      zip.file(file.name, blob);
+      const { data, error } = await supabaseClient.storage
+        .from(STORAGE_BUCKET)
+        .download(`${path}/${file.name}`);
+      if (error) throw error;
+      zip.file(file.name, data);
     }
     const zipBlob = await zip.generateAsync({ type: "blob" });
     const url = URL.createObjectURL(zipBlob);
@@ -159,7 +179,11 @@ function setupUpload(panel, lab) {
   const form = panel.querySelector(".upload-panel");
   const regInput = panel.querySelector(".reg-no-input");
   const fileInput = panel.querySelector(".file-input");
+  const submitButton = form.querySelector("button[type=submit]");
   const message = panel.querySelector(".message");
+  const stateMessage = panel.querySelector(".upload-state");
+
+  loadUploadState(courseCode, lab.id, regInput, fileInput, submitButton, stateMessage);
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -172,9 +196,9 @@ function setupUpload(panel, lab) {
       message.classList.add("error");
       return;
     }
-    const file = fileInput.files[0];
-    if (!file) {
-      message.textContent = "Please choose a file to submit.";
+    const files = [...fileInput.files];
+    if (!files.length) {
+      message.textContent = "Please choose one or more files to submit.";
       message.classList.add("error");
       return;
     }
@@ -182,24 +206,23 @@ function setupUpload(panel, lab) {
     // Folder is created automatically the first time this reg. no. uploads —
     // nothing needs to be pre-created in Supabase.
     const folderPath = `${courseCode}/${lab.id}/submission/${regNo}`;
-    const filePath = `${folderPath}/${file.name}`;
 
     try {
-      const { data: existing } = await supabaseClient.storage.from(STORAGE_BUCKET).list(folderPath);
-      const alreadySubmitted = (existing || []).some(f => f.name === file.name);
-      if (alreadySubmitted) {
-        const proceed = window.confirm(
-          "You've already submitted a file with this name for this lab. Uploading again will overwrite your previous submission. Continue?"
-        );
-        if (!proceed) return;
+      const failedFiles = [];
+      for (const file of files) {
+        const { error } = await supabaseClient.storage
+          .from(STORAGE_BUCKET)
+          .upload(`${folderPath}/${file.name}`, file);
+        if (error) failedFiles.push(`${file.name}: ${error.message}`);
       }
 
-      const { error } = await supabaseClient.storage
-        .from(STORAGE_BUCKET)
-        .upload(filePath, file, { upsert: true });
-      if (error) throw error;
+      if (failedFiles.length) {
+        message.textContent = `Some files failed: ${failedFiles.join(" | ")}`;
+        message.classList.add("error");
+        return;
+      }
 
-      message.textContent = "Submitted successfully.";
+      message.textContent = `${files.length} file${files.length === 1 ? "" : "s"} submitted successfully.`;
       message.classList.add("success");
       form.reset();
     } catch (err) {
@@ -208,4 +231,25 @@ function setupUpload(panel, lab) {
       message.classList.add("error");
     }
   });
+}
+
+async function loadUploadState(courseCode, labId, regInput, fileInput, submitButton, stateMessage) {
+  try {
+    const { data, error } = await supabaseClient
+      .from("lab_settings")
+      .select("uploads_enabled")
+      .eq("course_code", courseCode)
+      .eq("lab_id", labId)
+      .maybeSingle();
+    if (error) throw error;
+    if (data && !data.uploads_enabled) {
+      regInput.disabled = true;
+      fileInput.disabled = true;
+      submitButton.disabled = true;
+      stateMessage.textContent = "Submissions are closed for this lab.";
+      stateMessage.classList.add("error");
+    }
+  } catch (err) {
+    console.warn("Could not load upload state", err);
+  }
 }

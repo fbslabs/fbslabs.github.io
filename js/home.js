@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const grid = document.getElementById("course-grid");
 
-  COURSES.forEach((course, i) => {
+  COURSES.forEach(course => {
     const a = document.createElement("a");
     a.className = "lab-card";
     a.href = `course.html?code=${encodeURIComponent(course.code)}`;

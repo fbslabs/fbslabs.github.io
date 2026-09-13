@@ -15,6 +15,7 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 
 body {
   margin: 0;
@@ -34,6 +35,8 @@ h3 { margin: .8rem 0 .35rem; font-size: 1.5rem; }
 .logo { width: 88px; height: 88px; object-fit: contain; background: rgba(255,255,255,.1); border-radius: 10px; padding: .35rem; }
 .institution { font-family: "DM Serif Display", Georgia, serif; font-size: clamp(1.35rem, 2.8vw, 2rem); line-height: 1.2; }
 .faculty { margin-top: .55rem; color: #b9d6d3; font-size: clamp(1rem, 1.6vw, 1.2rem); font-weight: 600; }
+.admin-link { margin-left: auto; flex: none; color: white; border: 1px solid rgba(255,255,255,.55); border-radius: 6px; padding: .55rem .8rem; text-decoration: none; font-size: .88rem; font-weight: 700; white-space: nowrap; }
+.admin-link:hover { background: white; color: var(--navy); }
 
 .container { max-width: 1180px; margin: auto; padding: 3.2rem 1.5rem 5rem; }
 .home-page { min-height: 100vh; display: flex; flex-direction: column; overflow-y: hidden; }
@@ -130,6 +133,62 @@ footer { background: var(--navy-deep); color: white; text-align: center; padding
 .course-page footer { padding: .75rem 1rem; }
 .course-page footer p { margin: .2rem 0; }
 
+.admin-topbar, .admin-controls, .admin-lab-heading, .admin-actions { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.admin-topbar-actions { display: flex; align-items: center; gap: .65rem; }
+.admin-topbar { margin-bottom: 2rem; }
+.admin-topbar h1 { margin-bottom: 0; }
+.admin-panel, .admin-lab-card { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); padding: 1.5rem; }
+.admin-login-panel { width: min(100%, 540px); margin: 2rem auto 0; padding: clamp(1.5rem, 4vw, 2.5rem); border: 1px solid rgba(19,124,120,.18); border-top: 5px solid var(--teal); border-radius: 22px; box-shadow: 0 18px 45px rgba(18,36,58,.1), 0 3px 10px rgba(19,124,120,.06); animation: login-panel-in .45s ease-out both; }
+.admin-login-panel h2 { margin-top: .35rem; }
+.admin-login-intro { margin: .55rem 0 1.5rem; color: var(--muted); }
+.admin-login-form { display: grid; grid-template-columns: 1fr; gap: 1rem; align-items: end; max-width: 480px; }
+.admin-login-form .btn { width: 100%; margin-top: .25rem; }
+.admin-login-form input { min-height: 48px; border-radius: 10px; color: var(--ink); font-weight: 600; transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease; }
+.admin-login-form input:focus { background: #fffefc; box-shadow: 0 0 0 4px rgba(19,124,120,.1); }
+.admin-login-form input::placeholder { color: #91a09f; }
+.admin-login-form .btn { border-radius: 10px; box-shadow: 0 5px 12px rgba(19,124,120,.18); transition: background .15s ease, transform .15s ease, box-shadow .15s ease; }
+.admin-login-form .btn:hover { box-shadow: 0 8px 16px rgba(19,124,120,.24); }
+.admin-login-form label { font-weight: 700; }
+.admin-controls { margin-bottom: 1.5rem; }
+.admin-controls label { max-width: 420px; width: 100%; }
+.admin-labs { display: grid; gap: 1rem; }
+.admin-lab-heading { align-items: flex-start; }
+.admin-lab-heading h2 { margin-top: .3rem; }
+.admin-title-line { display: flex; align-items: center; gap: .45rem; }
+.admin-title-line h2 { margin-bottom: 0; }
+.icon-btn { width: 32px; height: 32px; display: inline-grid; place-items: center; flex: none; border: 1px solid var(--line); border-radius: 50%; background: white; color: var(--teal-dark); font-size: 1.05rem; line-height: 1; cursor: pointer; transition: background .15s ease, color .15s ease, transform .15s ease; }
+.icon-btn:hover { background: var(--teal); color: white; transform: translateY(-1px); }
+.title-editor { display: flex; align-items: end; gap: .55rem; flex: 1 1 100%; }
+.title-editor label { flex: 1 1 auto; }
+.title-editor-actions { display: flex; gap: .45rem; }
+.title-editor-actions .btn { white-space: nowrap; }
+.upload-status { padding: .35rem .6rem; border-radius: 5px; font-size: .8rem; }
+.upload-status.is-open { background: #e6f4f1; color: var(--teal-dark); }
+.upload-status.is-closed { background: #fff0eb; color: #a64735; }
+.admin-actions { align-items: end; flex-wrap: wrap; margin-top: 1rem; }
+.admin-actions label { flex: 1 1 240px; }
+.admin-actions .btn { white-space: nowrap; }
+.admin-actions .save-title { align-self: end; }
+select { width: 100%; min-height: 44px; border: 1px solid #c5d1ce; background: white; border-radius: 6px; padding: .55rem .7rem; color: var(--ink); font: inherit; }
+
+@keyframes login-panel-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-login-panel, .admin-login-form input, .admin-login-form .btn { animation: none; transition: none; }
+}
+
+@media (min-width: 851px) {
+  .admin-page { min-height: 100vh; display: flex; flex-direction: column; }
+  .admin-page .admin-container { width: 100%; flex: 1; }
+  .admin-page footer { padding: .75rem 1rem; }
+  .admin-page:has(#login-panel:not([hidden])) { height: 100vh; overflow: hidden; }
+  .admin-page:has(#login-panel:not([hidden])) .admin-container { overflow: hidden; padding-top: 1.25rem; padding-bottom: 1.25rem; }
+  .admin-page:has(#login-panel:not([hidden])) .admin-login-panel { margin-top: 1rem; padding: 1.5rem; }
+}
+
 @media (min-width: 851px) {
   .course-page .lab-sidebar,
   .course-page .experiment-list { height: 100%; }
@@ -156,11 +215,44 @@ code { font-family: Consolas, monospace; }
   .upload-panel { grid-template-columns: 1fr; }
   .download-slot { text-align: left; }
   .exp-top { flex-direction: column; }
+  .admin-topbar, .admin-controls { align-items: flex-start; flex-direction: column; }
+  .admin-topbar-actions { width: 100%; }
+  .admin-topbar-actions .btn { flex: 1; }
+  .admin-actions { align-items: stretch; flex-direction: column; }
+  .admin-actions .btn { width: 100%; }
+  .admin-page h1 { font-size: 2.35rem; }
+  .admin-page h2 { font-size: 1.45rem; }
+  .admin-page .admin-container { padding-top: 2rem; }
+  .admin-panel, .admin-lab-card { padding: .95rem; }
+  .admin-controls { margin-bottom: .8rem; gap: .55rem; }
+  .admin-labs { gap: .7rem; }
+  .admin-lab-heading { gap: .7rem; }
+  .admin-lab-heading h2 { overflow-wrap: anywhere; }
+  .admin-message, .admin-lab-card .message { overflow-wrap: anywhere; }
+  .admin-actions { gap: .55rem; margin-top: .7rem; }
+  .admin-page .admin-actions label { flex: 0 0 auto; gap: .25rem; }
+  .admin-page .admin-actions input { height: 40px; min-height: 40px; padding: .4rem .55rem; }
+  .title-editor { align-items: stretch; flex-direction: column; gap: .45rem; }
+  .title-editor-actions { width: 100%; }
+  .title-editor-actions .btn { flex: 1; }
 }
 
 @media (max-width: 520px) {
-  .header-inner { min-height: 120px; padding: 1.25rem 1rem; gap: .85rem; }
+  .header-inner { min-height: 120px; padding: 1.25rem 1rem; gap: .85rem; flex-wrap: wrap; }
   .logo { width: 68px; height: 68px; }
+  .admin-link { margin-left: auto; }
+  .admin-page h1 { font-size: 2rem; }
+  .admin-page h2 { font-size: 1.3rem; }
+  .admin-page .admin-container { padding-top: 1.5rem; }
+  .admin-login-panel { margin-top: 1rem; border-radius: 17px; }
+  .admin-login-intro { font-size: .9rem; }
+  .admin-lab-heading { align-items: flex-start; flex-direction: column; }
+  .upload-status { align-self: flex-start; }
+  .admin-controls { margin-bottom: .6rem; }
+  .admin-labs { gap: .55rem; }
+  .admin-lab-card { padding: .8rem; }
+  .admin-actions { gap: .45rem; margin-top: .55rem; }
+  .admin-page .admin-actions label { flex-basis: auto; }
   .container { padding: 2.3rem 1rem 4rem; }
   h1 { font-size: 2.6rem; }
   .card-image-wrap { height: 155px; }
