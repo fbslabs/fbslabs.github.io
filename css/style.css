@@ -140,12 +140,19 @@ footer { background: var(--navy-deep); color: white; text-align: center; padding
 code { font-family: Consolas, monospace; }
 
 @media (max-width: 850px) {
+  .home-page { overflow-y: visible; }
+  .home-page main.container { justify-content: flex-start; }
   .lab-grid { grid-template-columns: 1fr; }
   .course-layout { grid-template-columns: 1fr; }
-  .course-page .course-layout { grid-template-rows: auto minmax(0, 1fr); overflow: hidden; }
+  .course-page { overflow: visible; }
+  .course-page main.container { display: block; flex: none; height: auto; min-height: 0; overflow: visible; }
+  .course-page .course-layout { display: block; flex: none; height: auto; overflow: visible; }
   .lab-sidebar { position: static; }
-  .course-page .lab-nav { display: grid; grid-template-columns: 1fr; overflow-x: hidden; overflow-y: auto; padding-bottom: .25rem; }
-  .lab-nav-item { width: 100%; min-width: 0; }
+  .course-page .lab-sidebar { margin-bottom: 1rem; overflow: visible; }
+  .course-page .lab-nav { display: flex; gap: .45rem; overflow-x: auto; overflow-y: hidden; padding-bottom: .25rem; }
+  .lab-nav-item { width: auto; min-width: max-content; flex: 0 0 auto; }
+  .course-page .experiment-list { height: auto; max-height: none; overflow: visible; }
+  .course-page .experiment-card { height: auto; max-height: none; overflow: visible; }
   .upload-panel { grid-template-columns: 1fr; }
   .download-slot { text-align: left; }
   .exp-top { flex-direction: column; }
